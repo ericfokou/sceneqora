@@ -9,7 +9,8 @@ from pathlib import Path
 
 from sceneqora import __version__
 from sceneqora.domain.manifests import JobManifest
-from sceneqora.ingestion import inspect_video
+from sceneqora.ingestion import extract_audio, inspect_video
+from sceneqora.ingestion.audio import AudioExtractionError
 from sceneqora.ingestion.probe import ProbeError
 from sceneqora.infra.config import load_app_config
 
@@ -30,6 +31,12 @@ def build_parser() -> argparse.ArgumentParser:
         help="Probe a local video and print a normalized VideoAsset JSON payload.",
     )
     inspect_video_parser.add_argument("source_path", type=Path, help="Path to the local video file.")
+    extract_audio_parser = subparsers.add_parser(
+        "extract-audio",
+        help="Extract audio from a local video into a WAV PCM mono 16 kHz file.",
+    )
+    extract_audio_parser.add_argument("source_path", type=Path, help="Path to the local video file.")
+    extract_audio_parser.add_argument("output_path", type=Path, help="Path to the output WAV file.")
 
     parser.add_argument(
         "--version",
@@ -60,6 +67,15 @@ def main(argv: list[str] | None = None) -> int:
             print(f"Error: {exc}", file=sys.stderr)
             return 1
         print(json.dumps(video_asset.to_dict(), indent=2))
+        return 0
+
+    if args.command == "extract-audio":
+        try:
+            extracted_audio = extract_audio(args.source_path, args.output_path)
+        except AudioExtractionError as exc:
+            print(f"Error: {exc}", file=sys.stderr)
+            return 1
+        print(json.dumps(extracted_audio.to_dict(), indent=2))
         return 0
 
     parser.print_help()
