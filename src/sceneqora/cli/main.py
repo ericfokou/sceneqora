@@ -13,6 +13,7 @@ from sceneqora.ingestion import extract_audio, inspect_video
 from sceneqora.ingestion.audio import AudioExtractionError
 from sceneqora.ingestion.probe import ProbeError
 from sceneqora.infra.config import load_app_config
+from sceneqora.transcription import AudioTranscriptionError, transcribe_audio
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -37,6 +38,12 @@ def build_parser() -> argparse.ArgumentParser:
     )
     extract_audio_parser.add_argument("source_path", type=Path, help="Path to the local video file.")
     extract_audio_parser.add_argument("output_path", type=Path, help="Path to the output WAV file.")
+    transcribe_audio_parser = subparsers.add_parser(
+        "transcribe-audio",
+        help="Transcribe a local WAV file into a plain UTF-8 text file.",
+    )
+    transcribe_audio_parser.add_argument("source_path", type=Path, help="Path to the local WAV file.")
+    transcribe_audio_parser.add_argument("output_path", type=Path, help="Path to the output TXT file.")
 
     parser.add_argument(
         "--version",
@@ -76,6 +83,15 @@ def main(argv: list[str] | None = None) -> int:
             print(f"Error: {exc}", file=sys.stderr)
             return 1
         print(json.dumps(extracted_audio.to_dict(), indent=2))
+        return 0
+
+    if args.command == "transcribe-audio":
+        try:
+            transcript = transcribe_audio(args.source_path, args.output_path)
+        except AudioTranscriptionError as exc:
+            print(f"Error: {exc}", file=sys.stderr)
+            return 1
+        print(json.dumps(transcript.to_dict(), indent=2))
         return 0
 
     parser.print_help()

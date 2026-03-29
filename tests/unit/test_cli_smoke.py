@@ -102,3 +102,4 @@ def test_cli_help_lists_inspect_video_command() -> None:
     assert result.returncode == 0
     assert "inspect-video" in result.stdout
     assert "extract-audio" in result.stdout
+    assert "transcribe-audio" in result.stdout

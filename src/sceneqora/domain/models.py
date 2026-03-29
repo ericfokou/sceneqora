@@ -93,3 +93,35 @@ class ExtractedAudio:
 
     def to_dict(self) -> dict[str, str | int]:
         return asdict(self)
+
+
+@dataclass(frozen=True, slots=True)
+class TranscriptionArtifact:
+    """Minimal contract for a locally generated transcript text artifact."""
+
+    source_path: str
+    output_path: str
+    format: str
+    engine: str
+    status: str
+
+    @classmethod
+    def create(
+        cls,
+        source_path: Path,
+        output_path: Path,
+        *,
+        format: str = "txt",
+        engine: str,
+        status: str = "completed",
+    ) -> "TranscriptionArtifact":
+        return cls(
+            source_path=str(source_path),
+            output_path=str(output_path),
+            format=format,
+            engine=engine,
+            status=status,
+        )
+
+    def to_dict(self) -> dict[str, str]:
+        return asdict(self)
