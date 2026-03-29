@@ -8,6 +8,7 @@ import sys
 from pathlib import Path
 
 from sceneqora import __version__
+from sceneqora.app import LocalPipelineRunError, run_local_pipeline
 from sceneqora.domain.manifests import JobManifest
 from sceneqora.ingestion import extract_audio, inspect_video
 from sceneqora.ingestion.audio import AudioExtractionError
@@ -77,6 +78,20 @@ def build_parser() -> argparse.ArgumentParser:
         type=Path,
         help="Path to the output SRT file.",
     )
+    run_local_pipeline_parser = subparsers.add_parser(
+        "run-local-pipeline",
+        help="Run the minimal local pipeline on one video into one output directory.",
+    )
+    run_local_pipeline_parser.add_argument(
+        "source_path",
+        type=Path,
+        help="Path to the local video file.",
+    )
+    run_local_pipeline_parser.add_argument(
+        "output_dir",
+        type=Path,
+        help="Path to the output directory.",
+    )
 
     parser.add_argument(
         "--version",
@@ -143,6 +158,15 @@ def main(argv: list[str] | None = None) -> int:
             print(f"Error: {exc}", file=sys.stderr)
             return 1
         print(json.dumps(srt_artifact.to_dict(), indent=2))
+        return 0
+
+    if args.command == "run-local-pipeline":
+        try:
+            pipeline_artifact = run_local_pipeline(args.source_path, args.output_dir)
+        except LocalPipelineRunError as exc:
+            print(f"Error: {exc}", file=sys.stderr)
+            return 1
+        print(json.dumps(pipeline_artifact.to_dict(), indent=2))
         return 0
 
     parser.print_help()

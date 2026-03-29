@@ -221,3 +221,41 @@ class GeneratedSrtArtifact:
 
     def to_dict(self) -> dict[str, str | int]:
         return asdict(self)
+
+
+@dataclass(frozen=True, slots=True)
+class LocalPipelineRunArtifact:
+    """Minimal contract for a locally assembled pipeline run."""
+
+    source_path: str
+    output_dir: str
+    audio_path: str
+    transcript_path: str
+    segments_path: str
+    srt_path: str
+    status: str
+
+    @classmethod
+    def create(
+        cls,
+        *,
+        source_path: Path,
+        output_dir: Path,
+        audio_path: Path,
+        transcript_path: Path,
+        segments_path: Path,
+        srt_path: Path,
+        status: str = "completed",
+    ) -> "LocalPipelineRunArtifact":
+        return cls(
+            source_path=str(source_path),
+            output_dir=str(output_dir),
+            audio_path=str(audio_path),
+            transcript_path=str(transcript_path),
+            segments_path=str(segments_path),
+            srt_path=str(srt_path),
+            status=status,
+        )
+
+    def to_dict(self) -> dict[str, str]:
+        return asdict(self)
