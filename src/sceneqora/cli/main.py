@@ -13,7 +13,11 @@ from sceneqora.ingestion import extract_audio, inspect_video
 from sceneqora.ingestion.audio import AudioExtractionError
 from sceneqora.ingestion.probe import ProbeError
 from sceneqora.infra.config import load_app_config
-from sceneqora.transcription import AudioTranscriptionError, transcribe_audio
+from sceneqora.transcription import (
+    AudioTranscriptionError,
+    transcribe_audio,
+    transcribe_audio_timestamps,
+)
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -44,6 +48,20 @@ def build_parser() -> argparse.ArgumentParser:
     )
     transcribe_audio_parser.add_argument("source_path", type=Path, help="Path to the local WAV file.")
     transcribe_audio_parser.add_argument("output_path", type=Path, help="Path to the output TXT file.")
+    transcribe_audio_timestamps_parser = subparsers.add_parser(
+        "transcribe-audio-timestamps",
+        help="Transcribe a local WAV file into a minimal timestamped JSON artifact.",
+    )
+    transcribe_audio_timestamps_parser.add_argument(
+        "source_path",
+        type=Path,
+        help="Path to the local WAV file.",
+    )
+    transcribe_audio_timestamps_parser.add_argument(
+        "output_path",
+        type=Path,
+        help="Path to the output JSON file.",
+    )
 
     parser.add_argument(
         "--version",
@@ -87,11 +105,20 @@ def main(argv: list[str] | None = None) -> int:
 
     if args.command == "transcribe-audio":
         try:
-            transcript = transcribe_audio(args.source_path, args.output_path)
+            transcript_artifact = transcribe_audio(args.source_path, args.output_path)
         except AudioTranscriptionError as exc:
             print(f"Error: {exc}", file=sys.stderr)
             return 1
-        print(json.dumps(transcript.to_dict(), indent=2))
+        print(json.dumps(transcript_artifact.to_dict(), indent=2))
+        return 0
+
+    if args.command == "transcribe-audio-timestamps":
+        try:
+            timestamped_artifact = transcribe_audio_timestamps(args.source_path, args.output_path)
+        except AudioTranscriptionError as exc:
+            print(f"Error: {exc}", file=sys.stderr)
+            return 1
+        print(json.dumps(timestamped_artifact.to_cli_dict(), indent=2))
         return 0
 
     parser.print_help()

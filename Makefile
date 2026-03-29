@@ -1,9 +1,9 @@
 PYTHON ?= python3
 
-.PHONY: help test lint check cli inspect inspect-video extract-audio transcribe-audio
+.PHONY: help test lint check cli inspect inspect-video extract-audio transcribe-audio transcribe-audio-timestamps
 
 help:
-	@echo "Targets: test lint check cli inspect inspect-video extract-audio transcribe-audio"
+	@echo "Targets: test lint check cli inspect inspect-video extract-audio transcribe-audio transcribe-audio-timestamps"
 
 test:
 	PYTHONPATH=src $(PYTHON) -m pytest
@@ -27,3 +27,6 @@ extract-audio:
 
 transcribe-audio:
 	PYTHONPATH=src $(PYTHON) -m sceneqora.cli.main transcribe-audio $(AUDIO) $(OUTPUT)
+
+transcribe-audio-timestamps:
+	PYTHONPATH=src $(PYTHON) -m sceneqora.cli.main transcribe-audio-timestamps $(AUDIO) $(OUTPUT)

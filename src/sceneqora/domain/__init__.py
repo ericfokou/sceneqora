@@ -5,6 +5,8 @@ from sceneqora.domain.models import (
     AppConfig,
     ExtractedAudio,
     JobStatus,
+    TimestampedTranscriptSegment,
+    TimestampedTranscriptionArtifact,
     TranscriptionArtifact,
     VideoAsset,
 )
@@ -14,6 +16,8 @@ __all__ = [
     "ExtractedAudio",
     "JobManifest",
     "JobStatus",
+    "TimestampedTranscriptSegment",
+    "TimestampedTranscriptionArtifact",
     "TranscriptionArtifact",
     "VideoAsset",
 ]

@@ -2,7 +2,7 @@
 
 ## Current stage
 
-Stage 2 focuses on minimal video ingestion, now covering local probe, minimal local audio extraction, and minimal local audio transcription.
+Stage 2 focuses on minimal video ingestion, now covering local probe, minimal local audio extraction, minimal local audio transcription, and minimal local transcript timestamps.
 
 ## Completed tickets
 
@@ -10,7 +10,8 @@ Stage 2 focuses on minimal video ingestion, now covering local probe, minimal lo
 2. `etape_1_002_config_contrats_manifest_minimal`
 3. `etape_2_001_probe_video_local_minimal`
 4. `etape_2_002_extraction_audio_locale_minimale`
-5. `etape_2_003_transcription_audio_locale_minimale` in local implementation/review state
+5. `etape_2_003_transcription_audio_locale_minimale`
+6. `etape_2_004_horodatage_transcription_audio_minimal` in local implementation/review state
 
 ## Current repo state
 
@@ -28,11 +29,14 @@ Stage 2 focuses on minimal video ingestion, now covering local probe, minimal lo
 - A minimal local audio transcription capability is implemented on the ticket branch for `etape_2_003`.
 - The CLI now also exposes `transcribe-audio` for plain UTF-8 transcript output.
 - Deterministic tests mock the STT adapter; the live transcription test remains outside `make check`.
+- A minimal local timestamped transcription capability is implemented on the ticket branch for `etape_2_004`.
+- The CLI now also exposes `transcribe-audio-timestamps` for minimal JSON segment output.
+- Deterministic tests mock the timestamp-capable STT adapter; the live timestamp test remains outside `make check`.
 
 ## Next logical step
 
-1. Wait for GPT 5.4 review of `etape_2_003` before any Git sequence.
-2. Run the live transcription test with a real local STT engine and include the result in the review loop.
+1. Wait for GPT 5.4 review of `etape_2_004` before any Git sequence.
+2. Run the live timestamped transcription test with a real local STT engine and include the result in the review loop.
 
 ## Guardrails
 
