@@ -300,3 +300,35 @@ class LocalPipelineOutputValidationArtifact:
 
     def to_dict(self) -> dict[str, str | bool | int]:
         return asdict(self)
+
+
+@dataclass(frozen=True, slots=True)
+class RealSpeechPipelineOutputValidationArtifact:
+    """Minimal validation summary for a real-speech local pipeline output."""
+
+    output_dir: str
+    transcript_non_empty: bool
+    segment_count: int
+    srt_non_empty: bool
+    status: str
+
+    @classmethod
+    def create(
+        cls,
+        *,
+        output_dir: Path,
+        transcript_non_empty: bool,
+        segment_count: int,
+        srt_non_empty: bool,
+        status: str,
+    ) -> "RealSpeechPipelineOutputValidationArtifact":
+        return cls(
+            output_dir=str(output_dir),
+            transcript_non_empty=transcript_non_empty,
+            segment_count=segment_count,
+            srt_non_empty=srt_non_empty,
+            status=status,
+        )
+
+    def to_dict(self) -> dict[str, str | bool | int]:
+        return asdict(self)
