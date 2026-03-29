@@ -87,3 +87,17 @@ def test_cli_inspect_prints_minimal_manifest() -> None:
         "profile_name": "default",
         "outputs_dir": "outputs",
     }
+
+
+def test_cli_help_lists_inspect_video_command() -> None:
+    result = subprocess.run(
+        [sys.executable, "-m", "sceneqora.cli.main", "--help"],
+        cwd=ROOT,
+        env={"PYTHONPATH": str(ROOT / "src")},
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+
+    assert result.returncode == 0
+    assert "inspect-video" in result.stdout

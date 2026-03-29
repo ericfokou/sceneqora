@@ -1,9 +1,9 @@
 PYTHON ?= python3
 
-.PHONY: help test lint check cli inspect
+.PHONY: help test lint check cli inspect inspect-video
 
 help:
-	@echo "Targets: test lint check cli inspect"
+	@echo "Targets: test lint check cli inspect inspect-video"
 
 test:
 	PYTHONPATH=src $(PYTHON) -m pytest
@@ -18,3 +18,6 @@ cli:
 
 inspect:
 	PYTHONPATH=src $(PYTHON) -m sceneqora.cli.main inspect
+
+inspect-video:
+	PYTHONPATH=src $(PYTHON) -m sceneqora.cli.main inspect-video $(VIDEO)

@@ -2,12 +2,13 @@
 
 ## Current stage
 
-Stage 1 focuses on a minimal executable repository plus the first configuration and domain contracts.
+Stage 2 focuses on minimal video ingestion, starting with a local probe-only capability.
 
 ## Completed tickets
 
 1. `etape_1_001_bootstrap_repo_minimal`
 2. `etape_1_002_config_contrats_manifest_minimal`
+3. `etape_2_001_probe_video_local_minimal` in local implementation/review state
 
 ## Current repo state
 
@@ -16,11 +17,14 @@ Stage 1 focuses on a minimal executable repository plus the first configuration 
 - The current CLI exposes one inspection mode: `inspect`.
 - The current domain nucleus is limited to `AppConfig`, `JobManifest`, and `JobStatus`.
 - A validation notebook exists for ticket `etape_1_002`.
+- A local `VideoAsset` probe capability is implemented on the ticket branch for `etape_2_001`.
+- The CLI now also exposes `inspect-video` for normalized probe output.
+- Deterministic tests use mocked or replayed `ffprobe` output; the live probe remains outside `make check`.
 
 ## Next logical step
 
-1. Open the next bounded ticket only after GPT 5.4 review of `etape_1_002`.
-2. Keep the next ticket outside ingestion, FFmpeg, transcription, scoring, and rendering unless explicitly validated.
+1. Wait for GPT 5.4 review of `etape_2_001` before any further implementation.
+2. Run the live probe test when `ffprobe` is available locally and include the result in the review loop.
 
 ## Guardrails
 
