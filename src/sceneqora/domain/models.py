@@ -332,3 +332,32 @@ class RealSpeechPipelineOutputValidationArtifact:
 
     def to_dict(self) -> dict[str, str | bool | int]:
         return asdict(self)
+
+
+@dataclass(frozen=True, slots=True)
+class PackagedRunArtifact:
+    """Minimal packaging summary for one local pipeline run output."""
+
+    output_dir: str
+    archive_path: str
+    included_files: list[str]
+    status: str
+
+    @classmethod
+    def create(
+        cls,
+        *,
+        output_dir: Path,
+        archive_path: Path,
+        included_files: list[str],
+        status: str,
+    ) -> "PackagedRunArtifact":
+        return cls(
+            output_dir=str(output_dir),
+            archive_path=str(archive_path),
+            included_files=included_files,
+            status=status,
+        )
+
+    def to_dict(self) -> dict[str, str | list[str]]:
+        return asdict(self)

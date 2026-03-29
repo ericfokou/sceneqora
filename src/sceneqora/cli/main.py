@@ -8,7 +8,13 @@ import sys
 from pathlib import Path
 
 from sceneqora import __version__
-from sceneqora.app import LocalPipelineRunError, run_local_pipeline, validate_local_pipeline_output
+from sceneqora.app import (
+    LocalPipelineRunError,
+    RunOutputPackagingError,
+    package_run_output,
+    run_local_pipeline,
+    validate_local_pipeline_output,
+)
 from sceneqora.domain.manifests import JobManifest
 from sceneqora.ingestion import extract_audio, inspect_video
 from sceneqora.ingestion.audio import AudioExtractionError
@@ -101,6 +107,20 @@ def build_parser() -> argparse.ArgumentParser:
         type=Path,
         help="Path to the output directory to validate.",
     )
+    package_output_parser = subparsers.add_parser(
+        "package-run-output",
+        help="Package one local pipeline output directory into one zip archive.",
+    )
+    package_output_parser.add_argument(
+        "output_dir",
+        type=Path,
+        help="Path to the pipeline output directory.",
+    )
+    package_output_parser.add_argument(
+        "archive_path",
+        type=Path,
+        help="Path to the output zip archive.",
+    )
 
     parser.add_argument(
         "--version",
@@ -182,6 +202,15 @@ def main(argv: list[str] | None = None) -> int:
         validation_artifact = validate_local_pipeline_output(args.output_dir)
         print(json.dumps(validation_artifact.to_dict(), indent=2))
         return 0 if validation_artifact.status == "completed" else 1
+
+    if args.command == "package-run-output":
+        try:
+            packaged_artifact = package_run_output(args.output_dir, args.archive_path)
+        except RunOutputPackagingError as exc:
+            print(f"Error: {exc}", file=sys.stderr)
+            return 1
+        print(json.dumps(packaged_artifact.to_dict(), indent=2))
+        return 0
 
     parser.print_help()
     return 0
