@@ -4,6 +4,7 @@ from sceneqora.domain.manifests import JobManifest
 from sceneqora.domain.models import (
     AppConfig,
     ExtractedAudio,
+    GeneratedSrtArtifact,
     JobStatus,
     TimestampedTranscriptSegment,
     TimestampedTranscriptionArtifact,
@@ -14,6 +15,7 @@ from sceneqora.domain.models import (
 __all__ = [
     "AppConfig",
     "ExtractedAudio",
+    "GeneratedSrtArtifact",
     "JobManifest",
     "JobStatus",
     "TimestampedTranscriptSegment",
