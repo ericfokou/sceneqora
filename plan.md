@@ -2,7 +2,7 @@
 
 ## Current stage
 
-Stage 3 focuses on assembling the minimal local pipeline, validating its local outputs, securing a minimal live run on real speech, and packaging one run locally.
+Stage 4 focuses on exposing the existing local pipeline through a minimal local HTTP API.
 
 ## Completed tickets
 
@@ -16,7 +16,8 @@ Stage 3 focuses on assembling the minimal local pipeline, validating its local o
 8. `etape_3_001_assemblage_pipeline_local_minimal`
 9. `etape_3_002_validation_output_pipeline_minimale`
 10. `etape_3_003_support_entree_parole_reelle_minimale`
-11. `etape_3_004_packaging_run_output_minimal` in local implementation/review state
+11. `etape_3_004_packaging_run_output_minimal`
+12. `etape_4_001_api_locale_minimale` in local implementation/review state
 
 ## Current repo state
 
@@ -52,11 +53,14 @@ Stage 3 focuses on assembling the minimal local pipeline, validating its local o
 - A minimal local run packaging capability is implemented on the ticket branch for `etape_3_004`.
 - The CLI now also exposes `package-run-output` to archive one run into one local `.zip`.
 - Deterministic tests validate exact archive contents and overwrite behavior without any external service.
+- A minimal local FastAPI capability is implemented on the ticket branch for `etape_4_001`.
+- The local API exposes `GET /health` and `POST /runs` with synchronous reuse of the existing pipeline service.
+- Deterministic tests validate HTTP success and simple error cases without any real server dependency beyond the in-process test client.
 
 ## Next logical step
 
-1. Wait for GPT 5.4 review of `etape_3_004` before any Git sequence.
-2. Run the live local packaging test on a real pipeline output directory and include the result in the review loop.
+1. Wait for GPT 5.4 review of `etape_4_001` before any Git sequence.
+2. Run the live local API test on `127.0.0.1:8000` and include the result in the review loop.
 
 ## Guardrails
 
