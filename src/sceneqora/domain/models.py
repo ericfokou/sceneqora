@@ -61,3 +61,35 @@ class VideoAsset:
 
     def to_dict(self) -> dict[str, str | int | float | bool | None]:
         return asdict(self)
+
+
+@dataclass(frozen=True, slots=True)
+class ExtractedAudio:
+    """Minimal contract for a locally extracted WAV audio artifact."""
+
+    source_path: str
+    output_path: str
+    sample_rate: int
+    channels: int
+    format: str
+
+    @classmethod
+    def create(
+        cls,
+        source_path: Path,
+        output_path: Path,
+        *,
+        sample_rate: int = 16000,
+        channels: int = 1,
+        format: str = "wav",
+    ) -> "ExtractedAudio":
+        return cls(
+            source_path=str(source_path),
+            output_path=str(output_path),
+            sample_rate=sample_rate,
+            channels=channels,
+            format=format,
+        )
+
+    def to_dict(self) -> dict[str, str | int]:
+        return asdict(self)
