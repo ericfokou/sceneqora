@@ -189,3 +189,35 @@ class TimestampedTranscriptionArtifact:
             "status": self.status,
             "segment_count": len(self.segments),
         }
+
+
+@dataclass(frozen=True, slots=True)
+class GeneratedSrtArtifact:
+    """Minimal contract for a locally generated SRT artifact."""
+
+    source_path: str
+    output_path: str
+    format: str
+    status: str
+    subtitle_count: int
+
+    @classmethod
+    def create(
+        cls,
+        source_path: Path,
+        output_path: Path,
+        *,
+        subtitle_count: int,
+        format: str = "srt",
+    ) -> "GeneratedSrtArtifact":
+        status = "completed" if subtitle_count > 0 else "no_subtitles"
+        return cls(
+            source_path=str(source_path),
+            output_path=str(output_path),
+            format=format,
+            status=status,
+            subtitle_count=subtitle_count,
+        )
+
+    def to_dict(self) -> dict[str, str | int]:
+        return asdict(self)

@@ -13,6 +13,7 @@ from sceneqora.ingestion import extract_audio, inspect_video
 from sceneqora.ingestion.audio import AudioExtractionError
 from sceneqora.ingestion.probe import ProbeError
 from sceneqora.infra.config import load_app_config
+from sceneqora.subtitles import SrtGenerationError, generate_srt
 from sceneqora.transcription import (
     AudioTranscriptionError,
     transcribe_audio,
@@ -61,6 +62,20 @@ def build_parser() -> argparse.ArgumentParser:
         "output_path",
         type=Path,
         help="Path to the output JSON file.",
+    )
+    generate_srt_parser = subparsers.add_parser(
+        "generate-srt",
+        help="Generate a minimal SRT file from a timestamped transcript JSON.",
+    )
+    generate_srt_parser.add_argument(
+        "source_path",
+        type=Path,
+        help="Path to the timestamped transcript JSON file.",
+    )
+    generate_srt_parser.add_argument(
+        "output_path",
+        type=Path,
+        help="Path to the output SRT file.",
     )
 
     parser.add_argument(
@@ -119,6 +134,15 @@ def main(argv: list[str] | None = None) -> int:
             print(f"Error: {exc}", file=sys.stderr)
             return 1
         print(json.dumps(timestamped_artifact.to_cli_dict(), indent=2))
+        return 0
+
+    if args.command == "generate-srt":
+        try:
+            srt_artifact = generate_srt(args.source_path, args.output_path)
+        except SrtGenerationError as exc:
+            print(f"Error: {exc}", file=sys.stderr)
+            return 1
+        print(json.dumps(srt_artifact.to_dict(), indent=2))
         return 0
 
     parser.print_help()
