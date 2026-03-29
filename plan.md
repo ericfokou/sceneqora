@@ -2,7 +2,7 @@
 
 ## Current stage
 
-Stage 3 focuses on assembling the minimal local pipeline, validating its local outputs, and securing a minimal live run on real speech.
+Stage 3 focuses on assembling the minimal local pipeline, validating its local outputs, securing a minimal live run on real speech, and packaging one run locally.
 
 ## Completed tickets
 
@@ -15,7 +15,8 @@ Stage 3 focuses on assembling the minimal local pipeline, validating its local o
 7. `etape_2_005_generation_srt_minimale`
 8. `etape_3_001_assemblage_pipeline_local_minimal`
 9. `etape_3_002_validation_output_pipeline_minimale`
-10. `etape_3_003_support_entree_parole_reelle_minimale` in local implementation/review state
+10. `etape_3_003_support_entree_parole_reelle_minimale`
+11. `etape_3_004_packaging_run_output_minimal` in local implementation/review state
 
 ## Current repo state
 
@@ -48,11 +49,14 @@ Stage 3 focuses on assembling the minimal local pipeline, validating its local o
 - A minimal real-speech validation capability is implemented on the ticket branch for `etape_3_003`.
 - This ticket reuses the existing pipeline and structural validator to assert only that a genuine speech source produces non-empty text artifacts.
 - Deterministic tests stay media-free and only simulate non-empty speech-like artifacts; the true speech run remains outside `make check`.
+- A minimal local run packaging capability is implemented on the ticket branch for `etape_3_004`.
+- The CLI now also exposes `package-run-output` to archive one run into one local `.zip`.
+- Deterministic tests validate exact archive contents and overwrite behavior without any external service.
 
 ## Next logical step
 
-1. Wait for GPT 5.4 review of `etape_3_003` before any Git sequence.
-2. Run the live local pipeline test on a real speech source and include the result in the review loop.
+1. Wait for GPT 5.4 review of `etape_3_004` before any Git sequence.
+2. Run the live local packaging test on a real pipeline output directory and include the result in the review loop.
 
 ## Guardrails
 
