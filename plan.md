@@ -2,7 +2,7 @@
 
 ## Current stage
 
-Stage 3 focuses on assembling the minimal local pipeline from the validated stage 2 bricks.
+Stage 3 focuses on assembling the minimal local pipeline and validating its local outputs.
 
 ## Completed tickets
 
@@ -13,7 +13,8 @@ Stage 3 focuses on assembling the minimal local pipeline from the validated stag
 5. `etape_2_003_transcription_audio_locale_minimale`
 6. `etape_2_004_horodatage_transcription_audio_minimal`
 7. `etape_2_005_generation_srt_minimale`
-8. `etape_3_001_assemblage_pipeline_local_minimal` in local implementation/review state
+8. `etape_3_001_assemblage_pipeline_local_minimal`
+9. `etape_3_002_validation_output_pipeline_minimale` in local implementation/review state
 
 ## Current repo state
 
@@ -40,11 +41,14 @@ Stage 3 focuses on assembling the minimal local pipeline from the validated stag
 - A minimal local pipeline assembly capability is implemented on the ticket branch for `etape_3_001`.
 - The CLI now also exposes `run-local-pipeline` to generate four fixed artifacts in one output directory.
 - Deterministic tests stub the stage 2 bricks; the live pipeline run remains outside `make check`.
+- A minimal local output validation capability is implemented on the ticket branch for `etape_3_002`.
+- The CLI now also exposes `validate-local-pipeline-output` for structural validation of one pipeline output directory.
+- Deterministic tests validate file presence, JSON structure, SRT counting, and simple output coherence.
 
 ## Next logical step
 
-1. Wait for GPT 5.4 review of `etape_3_001` before any Git sequence.
-2. Run the live local pipeline test from a real local video and include the result in the review loop.
+1. Wait for GPT 5.4 review of `etape_3_002` before any Git sequence.
+2. Run the live local output validation test on a real pipeline output directory and include the result in the review loop.
 
 ## Guardrails
 
