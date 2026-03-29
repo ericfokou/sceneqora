@@ -36,6 +36,41 @@ class WhisperSttAdapter:
 
         return text.strip()
 
+    def transcribe_segments(self, source_path: Path) -> list[dict[str, float | str]]:
+        whisper = self._import_whisper()
+
+        try:
+            model = whisper.load_model(self._model_name)
+            payload = model.transcribe(str(source_path), fp16=False, verbose=False, task="transcribe")
+        except Exception as exc:  # pragma: no cover - wrapped for stable CLI errors
+            raise WhisperAdapterError(
+                f"whisper failed for '{source_path}': {exc}"
+            ) from exc
+
+        raw_segments = payload.get("segments") if isinstance(payload, dict) else None
+        if raw_segments is None:
+            return []
+        if not isinstance(raw_segments, list):
+            raise WhisperAdapterError(f"whisper returned invalid segments for '{source_path}'")
+
+        segments: list[dict[str, float | str]] = []
+        for raw_segment in raw_segments:
+            if not isinstance(raw_segment, dict):
+                raise WhisperAdapterError(f"whisper returned invalid segments for '{source_path}'")
+
+            try:
+                start = float(raw_segment["start"])
+                end = float(raw_segment["end"])
+                text = str(raw_segment["text"]).strip()
+            except (KeyError, TypeError, ValueError) as exc:
+                raise WhisperAdapterError(
+                    f"whisper returned invalid segments for '{source_path}'"
+                ) from exc
+
+            segments.append({"start": start, "end": end, "text": text})
+
+        return segments
+
     def _import_whisper(self) -> Any:
         try:
             whisper = importlib.import_module("whisper")

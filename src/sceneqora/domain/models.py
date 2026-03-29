@@ -125,3 +125,67 @@ class TranscriptionArtifact:
 
     def to_dict(self) -> dict[str, str]:
         return asdict(self)
+
+
+@dataclass(frozen=True, slots=True)
+class TimestampedTranscriptSegment:
+    """Minimal timestamped transcript segment."""
+
+    start: float
+    end: float
+    text: str
+
+    def to_dict(self) -> dict[str, float | str]:
+        return asdict(self)
+
+
+@dataclass(frozen=True, slots=True)
+class TimestampedTranscriptionArtifact:
+    """Minimal contract for a locally generated timestamped transcript artifact."""
+
+    source_path: str
+    output_path: str
+    format: str
+    engine: str
+    status: str
+    segments: list[TimestampedTranscriptSegment]
+
+    @classmethod
+    def create(
+        cls,
+        source_path: Path,
+        output_path: Path,
+        *,
+        engine: str,
+        segments: list[TimestampedTranscriptSegment],
+        format: str = "json",
+    ) -> "TimestampedTranscriptionArtifact":
+        status = "completed" if segments else "no_segments"
+        return cls(
+            source_path=str(source_path),
+            output_path=str(output_path),
+            format=format,
+            engine=engine,
+            status=status,
+            segments=segments,
+        )
+
+    def to_dict(self) -> dict[str, str | list[dict[str, float | str]]]:
+        return {
+            "source_path": self.source_path,
+            "output_path": self.output_path,
+            "format": self.format,
+            "engine": self.engine,
+            "status": self.status,
+            "segments": [segment.to_dict() for segment in self.segments],
+        }
+
+    def to_cli_dict(self) -> dict[str, str | int]:
+        return {
+            "source_path": self.source_path,
+            "output_path": self.output_path,
+            "format": self.format,
+            "engine": self.engine,
+            "status": self.status,
+            "segment_count": len(self.segments),
+        }

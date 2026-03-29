@@ -13,3 +13,12 @@ class SttAdapter(Protocol):
 
     def transcribe(self, source_path: Path) -> str:
         """Return plain transcript text for a local audio file."""
+
+
+class TimestampedSttAdapter(Protocol):
+    """Minimal interface for local timestamp-capable speech-to-text adapters."""
+
+    engine_name: str
+
+    def transcribe_segments(self, source_path: Path) -> list[dict[str, float | str]]:
+        """Return minimal timestamped segments for a local audio file."""
