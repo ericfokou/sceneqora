@@ -2,7 +2,7 @@
 
 ## Current stage
 
-Stage 2 focuses on minimal video ingestion, now covering local probe, minimal local audio extraction, minimal local audio transcription, minimal local transcript timestamps, and minimal local SRT generation.
+Stage 3 focuses on assembling the minimal local pipeline from the validated stage 2 bricks.
 
 ## Completed tickets
 
@@ -12,7 +12,8 @@ Stage 2 focuses on minimal video ingestion, now covering local probe, minimal lo
 4. `etape_2_002_extraction_audio_locale_minimale`
 5. `etape_2_003_transcription_audio_locale_minimale`
 6. `etape_2_004_horodatage_transcription_audio_minimal`
-7. `etape_2_005_generation_srt_minimale` in local implementation/review state
+7. `etape_2_005_generation_srt_minimale`
+8. `etape_3_001_assemblage_pipeline_local_minimal` in local implementation/review state
 
 ## Current repo state
 
@@ -36,11 +37,14 @@ Stage 2 focuses on minimal video ingestion, now covering local probe, minimal lo
 - A minimal local SRT generation capability is implemented on the ticket branch for `etape_2_005`.
 - The CLI now also exposes `generate-srt` for deterministic SRT output from timestamped JSON.
 - Deterministic tests validate JSON structure and SRT rendering without a real STT engine.
+- A minimal local pipeline assembly capability is implemented on the ticket branch for `etape_3_001`.
+- The CLI now also exposes `run-local-pipeline` to generate four fixed artifacts in one output directory.
+- Deterministic tests stub the stage 2 bricks; the live pipeline run remains outside `make check`.
 
 ## Next logical step
 
-1. Wait for GPT 5.4 review of `etape_2_005` before any Git sequence.
-2. Run the live SRT generation test from a real local timestamped JSON artifact and include the result in the review loop.
+1. Wait for GPT 5.4 review of `etape_3_001` before any Git sequence.
+2. Run the live local pipeline test from a real local video and include the result in the review loop.
 
 ## Guardrails
 
