@@ -106,3 +106,4 @@ def test_cli_help_lists_inspect_video_command() -> None:
     assert "transcribe-audio-timestamps" in result.stdout
     assert "generate-srt" in result.stdout
     assert "run-local-pipeline" in result.stdout
+    assert "validate-local-pipeline-output" in result.stdout

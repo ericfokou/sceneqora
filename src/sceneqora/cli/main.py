@@ -8,7 +8,7 @@ import sys
 from pathlib import Path
 
 from sceneqora import __version__
-from sceneqora.app import LocalPipelineRunError, run_local_pipeline
+from sceneqora.app import LocalPipelineRunError, run_local_pipeline, validate_local_pipeline_output
 from sceneqora.domain.manifests import JobManifest
 from sceneqora.ingestion import extract_audio, inspect_video
 from sceneqora.ingestion.audio import AudioExtractionError
@@ -92,6 +92,15 @@ def build_parser() -> argparse.ArgumentParser:
         type=Path,
         help="Path to the output directory.",
     )
+    validate_output_parser = subparsers.add_parser(
+        "validate-local-pipeline-output",
+        help="Validate the minimal structure of one local pipeline output directory.",
+    )
+    validate_output_parser.add_argument(
+        "output_dir",
+        type=Path,
+        help="Path to the output directory to validate.",
+    )
 
     parser.add_argument(
         "--version",
@@ -168,6 +177,11 @@ def main(argv: list[str] | None = None) -> int:
             return 1
         print(json.dumps(pipeline_artifact.to_dict(), indent=2))
         return 0
+
+    if args.command == "validate-local-pipeline-output":
+        validation_artifact = validate_local_pipeline_output(args.output_dir)
+        print(json.dumps(validation_artifact.to_dict(), indent=2))
+        return 0 if validation_artifact.status == "completed" else 1
 
     parser.print_help()
     return 0

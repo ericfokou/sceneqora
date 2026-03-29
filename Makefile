@@ -1,9 +1,9 @@
 PYTHON ?= python3
 
-.PHONY: help test lint check cli inspect inspect-video extract-audio transcribe-audio transcribe-audio-timestamps generate-srt run-local-pipeline
+.PHONY: help test lint check cli inspect inspect-video extract-audio transcribe-audio transcribe-audio-timestamps generate-srt run-local-pipeline validate-local-pipeline-output
 
 help:
-	@echo "Targets: test lint check cli inspect inspect-video extract-audio transcribe-audio transcribe-audio-timestamps generate-srt run-local-pipeline"
+	@echo "Targets: test lint check cli inspect inspect-video extract-audio transcribe-audio transcribe-audio-timestamps generate-srt run-local-pipeline validate-local-pipeline-output"
 
 test:
 	PYTHONPATH=src $(PYTHON) -m pytest
@@ -36,3 +36,6 @@ generate-srt:
 
 run-local-pipeline:
 	PYTHONPATH=src $(PYTHON) -m sceneqora.cli.main run-local-pipeline $(VIDEO) $(OUTPUT_DIR)
+
+validate-local-pipeline-output:
+	PYTHONPATH=src $(PYTHON) -m sceneqora.cli.main validate-local-pipeline-output $(OUTPUT_DIR)

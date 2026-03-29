@@ -259,3 +259,44 @@ class LocalPipelineRunArtifact:
 
     def to_dict(self) -> dict[str, str]:
         return asdict(self)
+
+
+@dataclass(frozen=True, slots=True)
+class LocalPipelineOutputValidationArtifact:
+    """Minimal validation summary for a local pipeline output directory."""
+
+    output_dir: str
+    audio_exists: bool
+    transcript_exists: bool
+    segments_exists: bool
+    srt_exists: bool
+    segment_count: int
+    subtitle_count: int
+    status: str
+
+    @classmethod
+    def create(
+        cls,
+        *,
+        output_dir: Path,
+        audio_exists: bool,
+        transcript_exists: bool,
+        segments_exists: bool,
+        srt_exists: bool,
+        segment_count: int,
+        subtitle_count: int,
+        status: str,
+    ) -> "LocalPipelineOutputValidationArtifact":
+        return cls(
+            output_dir=str(output_dir),
+            audio_exists=audio_exists,
+            transcript_exists=transcript_exists,
+            segments_exists=segments_exists,
+            srt_exists=srt_exists,
+            segment_count=segment_count,
+            subtitle_count=subtitle_count,
+            status=status,
+        )
+
+    def to_dict(self) -> dict[str, str | bool | int]:
+        return asdict(self)
